@@ -4,7 +4,7 @@ A collection of battle-tested agent skills — each one distilled from a real pr
 
 | Skill | One-liner | Origin |
 |---|---|---|
-| [explain-format-picker](skills/explain-format-picker/) | Pick the output format (STE text → diagram → interactive page → explainer video) before explaining anything | Methodology distilled from Andrej Karpathy's note on upgrading LLM output formats; original implementation |
+| [explain-format-picker](skills/explain-format-picker/) | Pick the output format (STE text → diagram → interactive page → explainer video) before explaining anything; draft-first workflow with a machine-checked draft linter | Methodology distilled from Andrej Karpathy's note on upgrading LLM output formats; v2 mechanics absorbed from [answer-me-with-html](https://github.com/QingYunA/answer-me-with-html); original implementation |
 | [web-feature-survey](skills/web-feature-survey/) | Field-level feature inventory + benchmark docs for web admin systems, via dual-channel capture (HTML parsing + browser spot checks) | Distilled from a real parking-SaaS benchmarking project (84 pages) |
 
 Also published on [SkillHub](https://skillhub.cn) (search the skill names).

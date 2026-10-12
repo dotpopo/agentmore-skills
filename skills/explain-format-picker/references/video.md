@@ -1,44 +1,34 @@
-# Explainer Videos
+# Explainer Videos (v2: two tiers)
 
-Suited to abstract concepts, mechanisms that unfold over time, and content you only understand by watching it change. Style inspired by 3Blue1Brown: intuition first, symbols second; one idea per frame; the continuous change of the frame itself is the argument. Never impersonate the original author, never copy their brand assets, never imitate their voice.
+Style target: 3Blue1Brown — intuition first, symbols second; one idea per frame; the continuous change of the frame itself is the argument. Never impersonate the original author, never copy brand assets, never imitate their voice.
 
-## First establish what you can actually do
+## Tier 0 — video as a page (default)
 
-Inspect the environment before committing. Do not assume.
+A video is a diagram that changes on a schedule. Before encoding any MP4, build a **step player page** — the pattern popularized by [answer-me-with-html](https://github.com/QingYunA/answer-me-with-html):
 
-- **Visuals**: Manim is the usual choice. Without it, use whatever can generate animation frame by frame — e.g. scripts that draw SVG/Canvas frames, then compose.
-- **Voiceover**: prefer built-in TTS. For local setups, use an actually available and licensed local TTS. Only consider an external voice service (e.g. ElevenLabs) when the user explicitly requests it, and never ask for plaintext API keys in the conversation.
-- **Subtitles**: provided by default. If embedding fails, deliver an SRT file or a transcript.
-- **Compositing**: ffmpeg or an equivalent.
+- One self-contained HTML file: the diagram (SVG/Canvas/CSS) plus a player bar (play/pause, prev/next, progress, speed).
+- The draft's narration lines become **beats**; each beat reveals or moves one thing in the diagram (a node lights up, an arrow draws, a state flips). The "camera" follows the current beat's node.
+- Beats start automatically and advance on a timer; captions show the current line; clicking a chapter jumps to it.
+- No ffmpeg, no encoding, works offline, text stays selectable, and every beat is exactly as precise as the draft it came from.
+- Voiceover: use the host's TTS if the user asked for sound; otherwise ship captions (default). Captions come from the draft lines — do not re-write them at render time.
 
-When a key tool is missing, say exactly what is missing, then step down to delivering "script + storyboard + runnable render code" or short captioned clips. Storyboards and scripts are intermediate products, not the final video — never present them as one.
+This tier satisfies most "explain it as a video" requests. Reply with the page path and one sentence.
 
-## Parameters
+## Tier 1 — rendered video (explicit request only)
 
-| Item | Default |
-|---|---|
-| Duration | Simple topics 60–90 s; complex topics 2–3 min; adjust to real capability |
-| Aspect | 16:9; 9:16 when explicitly targeting vertical mobile video |
-| Language | Match the user's language |
-| Structure | Core question → build intuition → dynamic mechanism → key conclusion → applicability limits |
+Build MP4/WebM when the user asks for a **video file** explicitly:
 
-## Production workflow
+- Inspect the environment before committing: Manim for visuals; ffmpeg (or equivalent) for compositing; a licensed TTS for voice. Missing tools → say what's missing, fall back to Tier 0 plus a storyboard, and call the storyboard a storyboard — never a video.
+- Render beats from the same draft; spot-check 1–2 frames for overflow, overlap, contrast.
+- Deliver the file + a text summary (core conclusion, key parameters, applicability limits).
 
-1. **Write the narration first, not the code.** Narration in STE style: short sentences, one idea per sentence.
-2. **Break into shots.** Each shot covers one or two narration lines; write down what appears and how it changes.
-3. **Visuals serve the narration.** If the narration says "two quantities grow together", the frame must show two quantities growing together. Highlight whatever is being discussed; no filler material.
-4. **Render and inspect.** Spot-check a few frames: text overflow, overlaps, sufficient contrast.
-5. **Deliver.** Video file plus a short text summary (core conclusion, key parameters, applicability limits) for later reference.
+## Draft rules (both tiers)
 
-## Visual principles
-
-- One idea per frame; information appears progressively, never all at once.
-- An object keeps the same name, color, and symbol throughout.
-- Minimal text; if a shape can say it, don't write it.
-- Every change has a purpose — motion, morphing, and highlights must be explaining some relationship.
-- After a key transformation or formula appears, leave time to absorb it.
-- Dark background, high contrast, large type.
-- Math and data must be exact: use controlled rendering and compositing. Never entrust formula correctness to generative imagery.
+- Structure: core question → intuition → dynamic mechanism → key conclusion → applicability limits.
+- One beat = one or two narration lines; each beat changes exactly one thing; the picture serves the narration ("two quantities grow together" ⇒ two quantities grow together).
+- Duration by beat count, not ambition: 8–15 beats for a short topic; 16:9 (9:16 only for phone-first).
+- An object keeps the same name, color, symbol throughout; text minimal; every change explains a relationship; after a key transformation, pause.
+- Math and data must be exact — controlled rendering, never generative imagery. Label simulated data `illustrative`.
 
 ## When NOT to make a video
 
